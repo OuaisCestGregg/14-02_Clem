@@ -12,7 +12,6 @@
       --text:#2b2b2b;
       --yes:#ff4d8d;
       --yesHover:#ff2f79;
-      --no:#6b7280;
       --shadow: 0 18px 50px rgba(0,0,0,.15);
     }
 
@@ -69,7 +68,7 @@
       z-index:2;
     }
     .card{
-      width:min(560px, 92vw);
+      width:min(620px, 92vw);
       background:var(--card);
       backdrop-filter: blur(10px);
       border:1px solid rgba(255,255,255,.6);
@@ -87,7 +86,7 @@
       border-radius:999px;
       background: rgba(255, 77, 141, .15);
       border:1px solid rgba(255, 77, 141, .25);
-      font-weight:600;
+      font-weight:700;
       margin-bottom:14px;
     }
 
@@ -103,29 +102,35 @@
       line-height:1.5;
     }
 
+    /* Zone boutons */
     .btnRow{
       position:relative;
-      height:120px; /* zone où le "Non" peut bouger */
+      height:130px;              /* zone où le "Non" peut bouger */
+      width: min(560px, 100%);
+      margin: 14px auto 0;
       display:flex;
-      justify-content:center;
+      justify-content: space-between; /* Oui à gauche, Non à droite (au départ) */
       align-items:flex-start;
       gap:14px;
-      margin-top:14px;
+      padding: 0 4px;
     }
 
     a.btn, button.btn{
       border:0;
       cursor:pointer;
       font-size:16px;
-      font-weight:700;
+      font-weight:800;
       border-radius:14px;
       padding:14px 18px;
-      min-width: 160px;
+      min-width: 200px;
       box-shadow: 0 10px 24px rgba(0,0,0,.10);
-      transition: transform .08s ease, filter .2s ease, background .2s ease;
+      transition: transform .12s ease, filter .2s ease, background .2s ease;
       user-select:none;
+      transform-origin: center;
+      line-height: 1.15;
     }
 
+    /* Bouton OUI */
     a.btn{
       display:inline-flex;
       justify-content:center;
@@ -134,16 +139,35 @@
       color:white;
       background: var(--yes);
     }
-    a.btn:hover{ background: var(--yesHover); transform: translateY(-1px); }
+    a.btn:hover{ background: var(--yesHover); }
 
+    /* Mise en forme du texte dans le bouton oui */
+    #yesBtn .yesWrap{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:6px;
+    }
+    #yesBtn .yesMain{
+      font-size: 18px;
+      font-weight: 900;
+    }
+    #yesBtn .yesSub{
+      font-size: 12px;
+      font-weight: 700;
+      opacity: .95;
+      max-width: 280px;
+    }
+
+    /* Bouton NON (positionné absolument pour pouvoir bouger) */
     button#noBtn{
       position:absolute;
-      left: 50%;
-      top: 62px;
-      transform: translateX(-50%);
+      right: 4px;
+      top: 0px;
       background: #e5e7eb;
       color: #111827;
       border: 1px solid rgba(0,0,0,.06);
+      transform-origin: center;
     }
     button#noBtn:hover{ filter: brightness(.98); }
 
@@ -153,7 +177,7 @@
       opacity:.7;
     }
 
-    /* Page plan (section cachée) */
+    /* Plan (si tu veux le garder plus tard) */
     .plan{
       display:none;
       margin-top:10px;
@@ -178,7 +202,7 @@
       background: rgba(255, 77, 141, .14);
       border: 1px solid rgba(255, 77, 141, .22);
       font-size:12px;
-      font-weight:700;
+      font-weight:800;
       margin-right:6px;
     }
   </style>
@@ -189,50 +213,66 @@
 
   <main class="wrap">
     <section class="card" aria-live="polite">
-      <div class="badge">💌 <span id="subtitle">Clémentine</span></div>
+      <div class="badge"><span id="subtitle">Clémentine</span></div>
+
       <h1 id="question">Veux-tu être ma Valentine ?</h1>
       <p id="hint">stp… 🙏</p>
 
       <div class="btnRow" id="btnZone">
-        <a class="btn" id="yesBtn" href="#plan">Oui car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais ❤️ </a>
+        <a class="btn" id="yesBtn" href="#plan">
+          <span class="yesWrap">
+            <span class="yesMain">Oui</span>
+            <span class="yesSub">
+              car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais ❤️
+            </span>
+          </span>
+        </a>
+
         <button class="btn" id="noBtn" type="button">Non</button>
       </div>
 
       <div class="plan" id="plan">
-        <h2><span class="chip">14/02</span>Au Programme</h2>
+        <h2><span class="chip">14 février</span>Le plan</h2>
         <ul id="planList">
-          <li>19h30 — Rendez-vous (tenue : joli smile 😉)</li>
+          <li>19h30 — Rendez-vous</li>
           <li>20h00 — Dîner surprise</li>
-          <li>Après — Petit moment magique ✨</li>
+          <li>Après — Petit moment magique</li>
         </ul>
-        <div class="footer" id="footerText">bisous ❤️</div>
+        <div class="footer" id="footerText">PS : j’ai hâte ❤️</div>
       </div>
     </section>
   </main>
 
   <script>
     // =========================
-    // CONFIG (modifie ici)
+    // CONFIG (facile à changer)
     // =========================
     const CONFIG = {
-      subtitle: "Invitation secrète",
+      subtitle: "Clémentine",
       question: "Veux-tu être ma Valentine ?",
-      hint: "Choisis bien… 😇",
+      hint: "stp… 🙏",
       footer: "PS : j’ai hâte ❤️",
       planItems: [
-        "19h30 — Rendez-vous (tenue : joli smile 😉)",
+        "19h30 — Rendez-vous",
         "20h00 — Dîner surprise",
-        "Après — Petit moment magique ✨"
+        "Après — Petit moment magique"
       ],
-      // Optionnel : personnaliser les couleurs
-      // bg1: "#ffd1dc", bg2:"#ffe7ef", yes:"#ff4d8d"
+      yesMain: "Oui",
+      yesSub:
+        "car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais ❤️"
     };
 
-    // Injecte le texte
+    // Injecte texte
     document.getElementById("subtitle").textContent = CONFIG.subtitle;
     document.getElementById("question").textContent = CONFIG.question;
     document.getElementById("hint").textContent = CONFIG.hint;
     document.getElementById("footerText").textContent = CONFIG.footer;
+
+    const yesBtn = document.getElementById("yesBtn");
+    const yesMainEl = yesBtn.querySelector(".yesMain");
+    const yesSubEl  = yesBtn.querySelector(".yesSub");
+    yesMainEl.textContent = CONFIG.yesMain;
+    yesSubEl.textContent  = CONFIG.yesSub;
 
     const planList = document.getElementById("planList");
     planList.innerHTML = "";
@@ -242,8 +282,7 @@
       planList.appendChild(li);
     });
 
-    // Quand on clique "Oui" → affiche le plan en douceur
-    const yesBtn = document.getElementById("yesBtn");
+    // Clique "Oui" -> affiche le plan
     const plan = document.getElementById("plan");
     yesBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -251,35 +290,122 @@
       plan.scrollIntoView({ behavior: "smooth", block: "nearest" });
     });
 
-    // Bouton Non qui esquive 😈
+    // =========================
+    // Bouton NON : esquive + règles
+    // - jamais sur le Oui
+    // - Non rétrécit, Oui grossit
+    // =========================
     const noBtn = document.getElementById("noBtn");
     const zone = document.getElementById("btnZone");
 
-    function moveNoButton(){
-      const zoneRect = zone.getBoundingClientRect();
-      const btnRect = noBtn.getBoundingClientRect();
+    let noScale  = 1;
+    let yesScale = 1;
 
-      // marges pour éviter de coller au bord
-      const pad = 8;
-
-      const maxX = zoneRect.width - btnRect.width - pad;
-      const maxY = zoneRect.height - btnRect.height - pad;
-
-      // position aléatoire dans la zone
-      const x = pad + Math.random() * Math.max(0, maxX);
-      const y = pad + Math.random() * Math.max(0, maxY);
-
-      noBtn.style.left = x + "px";
-      noBtn.style.top  = y + "px";
-      noBtn.style.transform = "translateX(0)";
+    function setScales() {
+      // On garde le bouton Non en position absolue, donc son transform sert au scale uniquement
+      noBtn.style.transform = `scale(${noScale})`;
+      yesBtn.style.transform = `scale(${yesScale})`;
     }
 
-    // Esquive dès que la souris s'approche
-    noBtn.addEventListener("mouseenter", moveNoButton);
+    function rectsOverlap(a, b) {
+      return !(a.right <= b.left || a.left >= b.right || a.bottom <= b.top || a.top >= b.bottom);
+    }
 
-    // Et si elle essaie de cliquer (mobile / touch inclus)
-    noBtn.addEventListener("mousedown", (e) => { e.preventDefault(); moveNoButton(); });
-    noBtn.addEventListener("touchstart", (e) => { e.preventDefault(); moveNoButton(); }, { passive:false });
+    function moveNoButton(){
+      const zoneRect = zone.getBoundingClientRect();
+      const yesRect  = yesBtn.getBoundingClientRect();
+
+      // On mesure le bouton Non après scale actuelle
+      const noRectNow = noBtn.getBoundingClientRect();
+      const btnW = noRectNow.width;
+      const btnH = noRectNow.height;
+
+      const pad = 6;
+      const maxX = zoneRect.width - btnW - pad;
+      const maxY = zoneRect.height - btnH - pad;
+
+      // Convertit un rect "viewport" en rect "zone-local"
+      function toLocal(r){
+        return {
+          left:   r.left   - zoneRect.left,
+          right:  r.right  - zoneRect.left,
+          top:    r.top    - zoneRect.top,
+          bottom: r.bottom - zoneRect.top
+        };
+      }
+
+      const yesLocal = toLocal(yesRect);
+
+      // On cherche une position aléatoire qui NE chevauche PAS le Oui
+      // (on essaie plusieurs fois)
+      let x = 0, y = 0;
+      let ok = false;
+
+      for (let i = 0; i < 60; i++) {
+        x = pad + Math.random() * Math.max(0, maxX);
+        y = pad + Math.random() * Math.max(0, maxY);
+
+        const noLocal = { left:x, right:x+btnW, top:y, bottom:y+btnH };
+
+        // marge de sécurité autour du Oui
+        const margin = 10;
+        const yesSafe = {
+          left: yesLocal.left - margin,
+          right: yesLocal.right + margin,
+          top: yesLocal.top - margin,
+          bottom: yesLocal.bottom + margin
+        };
+
+        if (!rectsOverlap(noLocal, yesSafe)) {
+          ok = true;
+          break;
+        }
+      }
+
+      // Si on n'a pas trouvé (rare), on force à droite du Oui
+      if (!ok) {
+        x = Math.min(maxX, yesLocal.right + 14);
+        y = pad + Math.random() * Math.max(0, maxY);
+      }
+
+      // Place le bouton Non (position absolue dans la zone)
+      noBtn.style.left = x + "px";
+      noBtn.style.top  = y + "px";
+      noBtn.style.right = "auto";
+    }
+
+    function punishNoAttempt() {
+      // Non rétrécit
+      noScale = Math.max(0.35, noScale * 0.88);
+
+      // Oui grossit
+      yesScale = Math.min(1.65, yesScale * 1.06);
+
+      setScales();
+    }
+
+    // Esquive quand la souris approche
+    noBtn.addEventListener("mouseenter", () => {
+      punishNoAttempt();
+      moveNoButton();
+    });
+
+    // Esquive quand tentative de clic
+    noBtn.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      punishNoAttempt();
+      moveNoButton();
+    });
+
+    // Mobile
+    noBtn.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      punishNoAttempt();
+      moveNoButton();
+    }, { passive:false });
+
+    // Init scales (au cas où)
+    setScales();
 
     // Décor : coeurs qui flottent
     const hearts = document.getElementById("hearts");
@@ -307,8 +433,9 @@
     }
 
     spawnHearts();
+
     window.addEventListener("resize", () => {
-      // évite que le bouton Non sorte si la taille change
+      // Repositionne pour éviter des surprises en redimensionnant
       moveNoButton();
     });
   </script>
