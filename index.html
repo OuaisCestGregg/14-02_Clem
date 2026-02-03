@@ -67,7 +67,7 @@
       z-index:2;
     }
     .card{
-      width:min(680px, 92vw);
+      width:min(720px, 92vw);
       background:var(--card);
       backdrop-filter: blur(10px);
       border:1px solid rgba(255,255,255,.6);
@@ -77,6 +77,11 @@
       text-align:center;
     }
 
+    /* "Pages" internes */
+    .view{ display:none; }
+    .view.active{ display:block; }
+
+    /* Badge (page question) */
     .badge{
       display:inline-flex;
       align-items:center;
@@ -85,7 +90,7 @@
       border-radius:999px;
       background: rgba(255, 77, 141, .15);
       border:1px solid rgba(255, 77, 141, .25);
-      font-weight:800;
+      font-weight:900;
       margin-bottom:14px;
     }
 
@@ -101,28 +106,7 @@
       line-height:1.5;
     }
 
-    /* "Pages" internes */
-    .view{ display:none; }
-    .view.active{ display:block; }
-
-    /* Zone boutons */
-    .btnRow{
-      position:relative;
-      height:140px;
-      width: min(620px, 100%);
-      margin: 14px auto 0;
-      display:flex;
-      justify-content: space-between; /* Oui à gauche au début */
-      align-items:flex-start;
-      gap:14px;
-      padding: 0 4px;
-    }
-    .btnRow.single{
-      justify-content:center; /* quand Non a disparu */
-      height:auto;
-      padding-top:6px;
-    }
-
+    /* Boutons */
     a.btn, button.btn{
       border:0;
       cursor:pointer;
@@ -138,8 +122,8 @@
       line-height: 1.15;
     }
 
-    /* OUI */
-    a.btn{
+    /* Bouton principal rose */
+    .btnPink{
       display:inline-flex;
       justify-content:center;
       align-items:center;
@@ -147,8 +131,36 @@
       color:white;
       background: var(--yes);
     }
-    a.btn:hover{ background: var(--yesHover); }
+    .btnPink:hover{ background: var(--yesHover); }
 
+    /* Page INTRO */
+    .introBtn{
+      font-size: clamp(22px, 3.2vw, 32px);
+      padding: 18px 22px;
+      min-width: min(520px, 92%);
+      border-radius: 18px;
+      letter-spacing: .2px;
+    }
+
+    /* Zone boutons (page question) */
+    .btnRow{
+      position:relative;
+      height:140px;
+      width: min(640px, 100%);
+      margin: 14px auto 0;
+      display:flex;
+      justify-content: space-between; /* Oui à gauche au début */
+      align-items:flex-start;
+      gap:14px;
+      padding: 0 4px;
+    }
+    .btnRow.single{
+      justify-content:center; /* quand Non a disparu */
+      height:auto;
+      padding-top:6px;
+    }
+
+    /* Mise en forme texte bouton oui */
     #yesBtn .yesWrap{
       display:flex;
       flex-direction:column;
@@ -163,7 +175,7 @@
       font-size: 12px;
       font-weight: 800;
       opacity: .95;
-      max-width: 320px;
+      max-width: 340px;
     }
 
     /* NON */
@@ -182,14 +194,15 @@
       pointer-events:none;
     }
 
-    /* Page "Je le savais" */
+    /* Page MESSAGE */
     .know{
       padding: 14px 6px 6px;
     }
     .knowTitle{
-      font-size: clamp(26px, 3.3vw, 38px);
+      font-size: clamp(22px, 3.0vw, 30px);
       font-weight: 950;
       margin: 6px 0 14px;
+      line-height: 1.25;
     }
     .arrowBtn{
       width: 62px;
@@ -208,7 +221,7 @@
     }
     .arrowBtn:hover{ transform: translateY(1px); filter: brightness(.98); }
 
-    /* Plan */
+    /* Programme */
     .plan{
       display:none;
       margin-top:14px;
@@ -240,8 +253,9 @@
     }
     .footer{
       margin-top:10px;
-      font-size: 12.5px;
-      opacity:.7;
+      font-size: 13px;
+      font-weight: 900;
+      opacity:.8;
     }
   </style>
 </head>
@@ -252,18 +266,25 @@
   <main class="wrap">
     <section class="card" aria-live="polite">
 
+      <!-- VIEW 0 : INTRO -->
+      <div class="view active" id="viewIntro">
+        <button class="btn btnPink introBtn" id="introBtn" type="button">
+          <span id="introText">Clémentine…</span>
+        </button>
+      </div>
+
       <!-- VIEW 1 : QUESTION -->
-      <div class="view active" id="viewQuestion">
+      <div class="view" id="viewQuestion">
         <div class="badge"><span id="subtitle">Clémentine</span></div>
         <h1 id="question">Veux-tu être ma Valentine ?</h1>
         <p id="hint">stp… 🙏</p>
 
         <div class="btnRow" id="btnZone">
-          <a class="btn" id="yesBtn" href="#noop">
+          <a class="btn btnPink" id="yesBtn" href="#noop">
             <span class="yesWrap">
               <span class="yesMain">Oui ❤️</span>
-              <span class="yesSub">
-                car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais
+              <span class="yesSub" id="yesSub">
+                car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais !
               </span>
             </span>
           </a>
@@ -272,15 +293,23 @@
         </div>
       </div>
 
-      <!-- VIEW 2 : JE LE SAVAIS -->
+      <!-- VIEW 2 : MESSAGE -->
       <div class="view" id="viewKnew">
         <div class="know">
-          <div class="knowTitle">hehe, je le savais !! Moi aussi je t'aime mon amour 😘</div>
-          <button class="arrowBtn" id="showPlanBtn" type="button" aria-label="Afficher le plan">↓</button>
+          <div class="knowTitle" id="knewText">
+            hehe, je le savais !! moi aussi je t'aime mon amour 😘
+          </div>
+
+          <button class="arrowBtn" id="showPlanBtn" type="button" aria-label="Afficher le programme">↓</button>
 
           <div class="plan" id="plan">
-            <h2><span class="chip">14/02 </span>Au programme 🥂</h2>
+            <h2>
+              <span class="chip" id="chipDate">14/02</span>
+              <span id="programTitle">Au programme 🥂</span>
+            </h2>
+
             <ul id="planList"></ul>
+
             <div class="footer" id="footerText">Bisou ❤️</div>
           </div>
         </div>
@@ -294,47 +323,91 @@
     // CONFIG (modifie ici)
     // =========================
     const CONFIG = {
+      // Intro
+      introText: "Clémentine…",
+
+      // Page question
       subtitle: "Clémentine",
       question: "Veux-tu être ma Valentine ?",
       hint: "stp… 🙏",
-      footer: "Bisou ❤️",
+
+      // Bouton Oui
+      yesMain: "Oui ❤️",
+      yesSub:
+        "car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais !",
+
+      // Page message
+      knewText: "hehe, je le savais !! moi aussi je t'aime mon amour 😘",
+
+      // Programme
+      chipDate: "14/02",
+      programTitle: "Au programme 🥂",
       planItems: [
         "19h30 — Rendez-vous",
         "20h00 — Dîner surprise",
         "Après — Petit moment magique ✨"
       ],
-      yesMain: "Oui ❤️",
-      yesSub:
-        "car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais"
+      footer: "Bisou ❤️"
     };
 
     // DOM
+    const viewIntro = document.getElementById("viewIntro");
     const viewQuestion = document.getElementById("viewQuestion");
     const viewKnew = document.getElementById("viewKnew");
+
+    const introBtn = document.getElementById("introBtn");
+    const introText = document.getElementById("introText");
+
     const subtitleEl = document.getElementById("subtitle");
     const questionEl = document.getElementById("question");
     const hintEl = document.getElementById("hint");
-    const footerEl = document.getElementById("footerText");
 
     const zone = document.getElementById("btnZone");
     const yesBtn = document.getElementById("yesBtn");
+    const yesSubEl = document.getElementById("yesSub");
     const noBtn  = document.getElementById("noBtn");
 
-    // Injecte texte
+    const knewTextEl = document.getElementById("knewText");
+    const chipDateEl = document.getElementById("chipDate");
+    const programTitleEl = document.getElementById("programTitle");
+    const footerEl = document.getElementById("footerText");
+
+    const showPlanBtn = document.getElementById("showPlanBtn");
+    const plan = document.getElementById("plan");
+    const planList = document.getElementById("planList");
+
+    function showView(id){
+      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+    }
+
+    // Injecte textes
+    introText.textContent = CONFIG.introText;
+
     subtitleEl.textContent = CONFIG.subtitle;
     questionEl.textContent = CONFIG.question;
     hintEl.textContent = CONFIG.hint;
-    footerEl.textContent = CONFIG.footer;
 
     yesBtn.querySelector(".yesMain").textContent = CONFIG.yesMain;
-    yesBtn.querySelector(".yesSub").textContent  = CONFIG.yesSub;
+    yesSubEl.textContent = CONFIG.yesSub;
 
-    const planList = document.getElementById("planList");
+    knewTextEl.textContent = CONFIG.knewText;
+
+    chipDateEl.textContent = CONFIG.chipDate;
+    programTitleEl.textContent = CONFIG.programTitle;
+
+    footerEl.textContent = CONFIG.footer;
+
     planList.innerHTML = "";
     CONFIG.planItems.forEach(t => {
       const li = document.createElement("li");
       li.textContent = t;
       planList.appendChild(li);
+    });
+
+    // Intro -> Question
+    introBtn.addEventListener("click", () => {
+      showView("viewQuestion");
     });
 
     // =========================
@@ -343,7 +416,7 @@
     let noScale  = 1;
     let yesScale = 1;
 
-    const MIN_NO_SCALE_BEFORE_HIDE = 0.18; // quand on passe sous ce seuil -> on cache
+    const MIN_NO_SCALE_BEFORE_HIDE = 0.18; // seuil disparition
     const YES_MAX_SCALE = 1.85;
 
     function setScales(){
@@ -361,7 +434,6 @@
       const zoneRect = zone.getBoundingClientRect();
       const yesRect  = yesBtn.getBoundingClientRect();
 
-      // mesurer non (avec scale actuelle)
       const noRectNow = noBtn.getBoundingClientRect();
       const btnW = noRectNow.width;
       const btnH = noRectNow.height;
@@ -415,24 +487,18 @@
     }
 
     function turnYesIntoOnlyOption(){
-      // cache Non + centre Oui
       noBtn.classList.add("hidden");
       zone.classList.add("single");
-
-      // on remet la hauteur auto, et on force Oui au centre visuellement
       yesBtn.style.margin = "0 auto";
       yesBtn.style.display = "inline-flex";
     }
 
     function punishNoAttempt(){
-      // Non rétrécit
       noScale = noScale * 0.82;
-
-      // Oui grossit
       yesScale = Math.min(YES_MAX_SCALE, yesScale * 1.07);
 
       if (noScale <= MIN_NO_SCALE_BEFORE_HIDE) {
-        noScale = 0; // pour être sûr
+        noScale = 0;
         setScales();
         turnYesIntoOnlyOption();
         return;
@@ -442,34 +508,22 @@
       moveNoButtonAvoidingYes();
     }
 
-    // triggers
     noBtn.addEventListener("mouseenter", punishNoAttempt);
     noBtn.addEventListener("mousedown", (e)=>{ e.preventDefault(); punishNoAttempt(); });
     noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); punishNoAttempt(); }, {passive:false});
 
-    // =========================
-    // Clique Oui -> page "Je le savais"
-    // =========================
-    function showView(id){
-      document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-    }
-
+    // Oui -> Message
     yesBtn.addEventListener("click", (e) => {
       e.preventDefault();
       showView("viewKnew");
     });
 
-    // Bouton flèche -> affiche le plan
-    const showPlanBtn = document.getElementById("showPlanBtn");
-    const plan = document.getElementById("plan");
-
+    // Flèche -> Programme
     showPlanBtn.addEventListener("click", () => {
       plan.classList.add("show");
       plan.scrollIntoView({ behavior: "smooth", block: "start" });
     });
 
-    // Init
     setScales();
 
     // Décor coeurs
