@@ -257,6 +257,40 @@
       font-weight: 900;
       opacity:.8;
     }
+
+    /* ===== Responsive mobile ===== */
+    @media (max-width: 520px){
+      .card{
+        width: min(520px, 94vw);
+        padding: 22px 16px;
+      }
+
+      .btnRow{
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 12px;
+        padding: 0;
+      }
+
+      button#noBtn{
+        position: relative;
+        right: auto;
+        top: auto;
+        left: auto;
+        margin: 0;
+      }
+
+      a.btn, button.btn{
+        min-width: 100%;
+      }
+
+      #yesBtn .yesSub{
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
@@ -269,7 +303,7 @@
       <!-- VIEW 0 : INTRO -->
       <div class="view active" id="viewIntro">
         <button class="btn btnPink introBtn" id="introBtn" type="button">
-          <span id="introText">Clémentine…</span>
+          <span id="introText">Pour ma chère et tendre Clémentine : </span>
         </button>
       </div>
 
@@ -282,9 +316,9 @@
         <div class="btnRow" id="btnZone">
           <a class="btn btnPink" id="yesBtn" href="#noop">
             <span class="yesWrap">
-              <span class="yesMain">Oui ❤️</span>
+              <span class="yesMain">Oui</span>
               <span class="yesSub" id="yesSub">
-                car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais !
+                car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais ❤️
               </span>
             </span>
           </a>
@@ -297,7 +331,7 @@
       <div class="view" id="viewKnew">
         <div class="know">
           <div class="knowTitle" id="knewText">
-            hehe, je le savais !! moi aussi je t'aime mon amour 😘
+            hehe, je le savais !! Moi aussi, je t'aime mon amour 😘
           </div>
 
           <button class="arrowBtn" id="showPlanBtn" type="button" aria-label="Afficher le programme">↓</button>
@@ -305,12 +339,12 @@
           <div class="plan" id="plan">
             <h2>
               <span class="chip" id="chipDate">14/02</span>
-              <span id="programTitle">Au programme 🥂</span>
+              <span id="programTitle">Au programme 🥂🥂</span>
             </h2>
 
             <ul id="planList"></ul>
 
-            <div class="footer" id="footerText">Bisou ❤️</div>
+            <div class="footer" id="footerText">bisou ❤️</div>
           </div>
         </div>
       </div>
@@ -324,7 +358,7 @@
     // =========================
     const CONFIG = {
       // Intro
-      introText: "Clémentine…",
+      introText: "Pour ma chère et tendre Clémentine : ",
 
       // Page question
       subtitle: "Clémentine",
@@ -332,29 +366,25 @@
       hint: "stp… 🙏",
 
       // Bouton Oui
-      yesMain: "Oui ❤️",
+      yesMain: "Oui",
       yesSub:
-        "car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais !",
+        "car tu es l'homme le plus beau, charismatique, fort, intelligent, élégant, romantique, attentionné, doux, fiable, rassurant, cultivé, généreux que je connais ❤️",
 
       // Page message
-      knewText: "hehe, je le savais !! moi aussi je t'aime mon amour 😘",
+      knewText: "hehe, je le savais !! Moi aussi, je t'aime mon amour 😘",
 
       // Programme
       chipDate: "14/02",
-      programTitle: "Au programme 🥂",
+      programTitle: "Au programme 🥂🥂",
       planItems: [
         "19h30 — Rendez-vous",
         "20h00 — Dîner surprise",
         "Après — Petit moment magique ✨"
       ],
-      footer: "Bisou ❤️"
+      footer: "bisou ❤️"
     };
 
     // DOM
-    const viewIntro = document.getElementById("viewIntro");
-    const viewQuestion = document.getElementById("viewQuestion");
-    const viewKnew = document.getElementById("viewKnew");
-
     const introBtn = document.getElementById("introBtn");
     const introText = document.getElementById("introText");
 
@@ -395,7 +425,6 @@
 
     chipDateEl.textContent = CONFIG.chipDate;
     programTitleEl.textContent = CONFIG.programTitle;
-
     footerEl.textContent = CONFIG.footer;
 
     planList.innerHTML = "";
@@ -409,6 +438,11 @@
     introBtn.addEventListener("click", () => {
       showView("viewQuestion");
     });
+
+    // ===== Mobile detection (pour désactiver le déplacement) =====
+    function isMobileLayout(){
+      return window.matchMedia("(max-width: 520px)").matches;
+    }
 
     // =========================
     // Logique Non -> disparaît, Oui -> se centre
@@ -430,6 +464,7 @@
 
     function moveNoButtonAvoidingYes(){
       if (noBtn.classList.contains("hidden")) return;
+      if (isMobileLayout()) return; // sur mobile : pas de déplacement, juste shrink
 
       const zoneRect = zone.getBoundingClientRect();
       const yesRect  = yesBtn.getBoundingClientRect();
@@ -553,7 +588,7 @@
     spawnHearts();
 
     window.addEventListener("resize", () => {
-      moveNoButtonAvoidingYes();
+      if (!isMobileLayout()) moveNoButtonAvoidingYes();
     });
   </script>
 </body>
