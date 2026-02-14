@@ -178,7 +178,7 @@
       max-width: 340px;
     }
 
-    /* NON */
+    /* NON (desktop) */
     button#noBtn{
       position:absolute;
       right: 4px;
@@ -275,6 +275,7 @@
         padding: 0;
       }
 
+      /* on met le NON "normal" par défaut sur mobile, puis il deviendra fixed quand il s'échappera */
       button#noBtn{
         position: relative;
         right: auto;
@@ -291,6 +292,15 @@
         max-width: 100%;
       }
     }
+
+    /* Quand le bouton Non "s'échappe" sur mobile */
+    #noBtn.mobileFloat{
+      position: fixed !important;
+      z-index: 9999;
+      left: 50vw;
+      top: 60vh;
+      right: auto !important;
+    }
   </style>
 </head>
 <body>
@@ -303,7 +313,7 @@
       <!-- VIEW 0 : INTRO -->
       <div class="view active" id="viewIntro">
         <button class="btn btnPink introBtn" id="introBtn" type="button">
-          <span id="introText">Pour ma chère et tendre Clémentine : </span>
+          <span id="introText">Pour ma tendre et douce Clémentine…</span>
         </button>
       </div>
 
@@ -311,7 +321,7 @@
       <div class="view" id="viewQuestion">
         <div class="badge"><span id="subtitle">Clémentine</span></div>
         <h1 id="question">Veux-tu être ma Valentine ?</h1>
-        <p id="hint">stp… 🙏</p>
+        <p id="hint">stp dis oui … 🙏</p>
 
         <div class="btnRow" id="btnZone">
           <a class="btn btnPink" id="yesBtn" href="#noop">
@@ -358,12 +368,12 @@
     // =========================
     const CONFIG = {
       // Intro
-      introText: "Pour ma chère et tendre Clémentine : ",
+      introText: "Pour ma tendre et douce Clémentine…",
 
       // Page question
       subtitle: "Clémentine",
       question: "Veux-tu être ma Valentine ?",
-      hint: "stp… 🙏",
+      hint: "stp dis oui … 🙏",
 
       // Bouton Oui
       yesMain: "Oui",
@@ -377,9 +387,12 @@
       chipDate: "14/02",
       programTitle: "Au programme 🥂🥂",
       planItems: [
-        "19h30 — Rendez-vous",
-        "20h00 — Dîner surprise",
-        "Après — Petit moment magique ✨"
+        "17h30 — Rendez-vous",
+        "P'tite activité",
+        "P'tite bouffe",
+        "P'tit Netflix",
+        "P'tit massage",
+        "Bon Dodo "
       ],
       footer: "bisou ❤️"
     };
@@ -439,7 +452,7 @@
       showView("viewQuestion");
     });
 
-    // ===== Mobile detection (pour désactiver le déplacement) =====
+    // ===== Mobile detection =====
     function isMobileLayout(){
       return window.matchMedia("(max-width: 520px)").matches;
     }
@@ -464,8 +477,32 @@
 
     function moveNoButtonAvoidingYes(){
       if (noBtn.classList.contains("hidden")) return;
-      if (isMobileLayout()) return; // sur mobile : pas de déplacement, juste shrink
 
+      // === MOBILE : le Non se balade sur tout l'écran ===
+      if (isMobileLayout()){
+        noBtn.classList.add("mobileFloat");
+
+        const pad = 12;
+        const r = noBtn.getBoundingClientRect();
+        const btnW = r.width;
+        const btnH = r.height;
+
+        const W = window.innerWidth;
+        const H = window.innerHeight;
+
+        const maxX = Math.max(pad, W - btnW - pad);
+        const maxY = Math.max(pad, H - btnH - pad);
+
+        const x = pad + Math.random() * (maxX - pad);
+        const y = pad + Math.random() * (maxY - pad);
+
+        noBtn.style.left = x + "px";
+        noBtn.style.top  = y + "px";
+        noBtn.style.right = "auto";
+        return;
+      }
+
+      // === DESKTOP : dans la zone, sans passer sur Oui ===
       const zoneRect = zone.getBoundingClientRect();
       const yesRect  = yesBtn.getBoundingClientRect();
 
@@ -540,7 +577,7 @@
       }
 
       setScales();
-      moveNoButtonAvoidingYes();
+      moveNoButtonAvoidingYes(); // bouge sur PC + sur mobile
     }
 
     noBtn.addEventListener("mouseenter", punishNoAttempt);
@@ -587,8 +624,11 @@
     }
     spawnHearts();
 
+    // Si on repasse desktop <-> mobile, on ajuste un peu
     window.addEventListener("resize", () => {
-      if (!isMobileLayout()) moveNoButtonAvoidingYes();
+      if (!isMobileLayout()) {
+        noBtn.classList.remove("mobileFloat");
+      }
     });
   </script>
 </body>
